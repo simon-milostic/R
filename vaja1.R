@@ -59,10 +59,9 @@ mean(c(4, 3, 2, 4, 3, 3, 5))
 # 1. Izračunajte vsoto kvadratov prvih n naravnih števil 
 #  `1^2 + 2^2 + ... + n^2` za n = 100. 
 # =======================================================================
+
 n <- 100
 sum((1:n)^2)
-
-
 
 # =======================================================================
 # 2. Za vektor `v = 2, 5, 1, 7` s pomočjo obravnavanih metod poiščite vektor,
@@ -70,9 +69,9 @@ sum((1:n)^2)
 # Želimo torej dobiti vektor `2, -5, 1, -7`.
 # Namig: vektor `v` pomnožite z ustreznim vektorjem. 
 # =======================================================================
+
 v <- c(2, 5, 1, 7)
 v * c(1, -1, 1, -1)
-
 
 # ========================================================================
 # Indeksi
@@ -115,19 +114,17 @@ x[x %% 3 == 0 | x %% 5 == 1] # števila, ki zadoščajo vsaj enemu pogoju
 # 3. Poiščite način kako za dan vektor `v` dobimo komponente na sodih 
 # mestih.
 # ========================================================================
+
 v <- c(3, 7, 1, 5, 9, 5, 5)
 v <- c(3, 7, 1, 5, 9, 5, 5, 8)
-
 v[seq(2, length(v),2)]
-
-
 
 # ========================================================================
 # 4. Poiščite način kako za dan vektor `v` dobimo le pozitivne komponente.
 # ========================================================================
+
 v <- -5:5
 v[v>0]
-
 
 # ========================================================================
 # Spreminjanje komponent
@@ -151,11 +148,11 @@ x[x > 1] <- 100 * x[x > 1] # komponente, večje od 1, pomnožimo s 100
 # stanj po obračunanih obrestih. Na pozitivna stanja se obračunajo 5%, na 
 # negativna pa 10% obresti.
 # ========================================================================
+
 stanja <- c(150, 50, -20, 0, 70, -60, 200)
 stanja[stanja>=0] <- 1.05 * stanja[stanja>=0]
 stanja[stanja<0] <- 1.1 * stanja[stanja<0]
 stanja
-
 
 # ========================================================================
 # Imena
@@ -277,11 +274,15 @@ outer(0:10, 0:10, function(i,j) choose(i, j))
 # Sestavi matriko velikosti `n` × `n` z vektorjem `d` na diagonali ter 
 # številom `i` izven diagonale.
 # ========================================================================
+
 n <- 10
 d <- seq(2, 11, length.out = n)
 i <- 10
-
-
+v <- (1:100)*0
+x = matrix(v,n,n)
+x[row(x) == col(x)] = d
+x[!(row(x) == col(x))] = i
+x
 
 # ========================================================================
 # 7. Za obdobje od 1925 do 2025 preštej, kolikokrat je 29. februar padel 
@@ -290,17 +291,21 @@ i <- 10
 # Namig: uporabi funkcije as.Date, paste0, weekdays
 # ========================================================================
 
-datum <- paste0("29.2.", "2020")
+datum <- paste0("29.2.", "1925:2025")
 datum2 <- as.Date(datum, format = "%d.%m.%Y")
-datum2
-weekdays(datum2)
+
+pravi_datumi <- datum2[!is.na(datum2)]
+
+sum(weekdays(pravi_datumi)) %in% c("Saturday","Sunday")
 
 # ========================================================================
 # 8. 
 # Sestavi vektor datumov vseh petkov, ki padejo na trinajsti dan v mesecu, 
 # v obdobju od tvojega rojstnega do današnjega dne.
 # ========================================================================
-
+datum0 <- paste0("22.11.2006")
+pravi_datum <- as.Date(datum0, format = "%d.%m.%y")
+pravi_datum
 
 
 
@@ -311,8 +316,17 @@ weekdays(datum2)
 # c) e^x * sinx izračunanimi v točkah x=3,3.1,3.2,…,6 (Namig: funkcija seq)
 # ========================================================================
 
+# 9. a)
+(rep(3,50)^(1:50))/(1:50)
 
+#9. b)
+x <- rep("A",50)
+y <- 1:50
+paste0(x,y)
 
+#9. c)
+x <- seq(3.0,6.0,by=0.1)
+exp(x) * sin(x)
 
 # ========================================================================
 # 10. Podano je naravno število x > 2. Zapiši izraz v R-ju, katerega 
@@ -322,9 +336,10 @@ weekdays(datum2)
 # seznama.
 # ========================================================================
 
-
-
-
+x <- sample(1:1000, 1)
+x
+y <- 0 %in% (x %% 2:(x-1)) 
+!y
 
 # ========================================================================
 # 11. Izračunaj dva vektorja `x` in `y` dolžine 250 tako, da s ponavljanjem 
@@ -334,13 +349,17 @@ weekdays(datum2)
 # a) Vektor z elementi y2−x1,y3−x2,…,y250−x249
 # b) Vsoto ∑_(i=1)^249 e^(−x_(i+1)) /(x_i+10)
 # ========================================================================
+
 x = sample(1:999, 250, replace = TRUE)
 y = sample(1:999, 250, replace = TRUE)
-
-
-
-
-
+#=====================================
+#vector = 1:249
+#y_n <- rep(0,250)
+#y_n [vector] = y[vector+1]
+#x <- x[-length(x)]
+#p <- y_n - x
+#=====================================
+y[-1] - x[-length(x)]
 
 # ========================================================================
 # 12. Vgrajen vektor `LETTERS` vsebuje 26 črk angleške abecede. 
@@ -362,9 +381,24 @@ y = sample(1:999, 250, replace = TRUE)
 
 # ========================================================================
 
+v <- LETTERS
+q <- c(1,2,3,4)
+v <- v[q]
+p <- rep(v, each = 3)
+z <- rep(v, 3)
+p; z
+
+g <- letters
+l <- sort(sample(g, size = 10))
+l
 
 
-
+v <- LETTERS
+g <- letters
+a <- sample(v, size = 5)
+b <- sample(g, size = 5)
+sort_let <- sort(a+b)
+sort_let
 
 # ========================================================================
 # 13. V programu za urejanje preglednic Excel (in podobno v programih 
