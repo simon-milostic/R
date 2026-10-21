@@ -145,7 +145,6 @@ for (i in 1:1000000) {
   v[i] <- runif(1)
 }
 
-
 # Najbolj neumna stvar, ki jo lahko naredimo, pa je ta, da začnemo s
 # praznim vektorjem in vanj na konec dodajamo naključna števila.
 v <- numeric(0)
@@ -199,16 +198,33 @@ mapply(vsota, 1:10, 3:12)
 # c) Seznamu dodaj element z imenom `norms`, ki je vektor 10 naključnih števil
 # iz standardne normalne porazdelitve. 
 # ========================================================================
+
+#1. a)
 s <- list(x=1:5, y=2:6, z=3:7)
+l <- sapply(s, length)
+all(l == l[1])
 
+#1. b)
+s <- list(x=1:5, y=2:6, z=3:7)
+l <- sapply(s, sum)
+l
 
+#1. c)
+s <- list(x=1:5, y=2:6, z=3:7)
+x <- rnorm(10)
+s$norms <- x
+s
 
 # ========================================================================
 # 2. Sestavite funkcijo `sodi(v)`, ki vrne vse komponente vektorja `v` na 
 # sodih mestih.
 
-
-
+sodi <- function(v) {
+  comp <- seq(2,length(v),2)
+  return(v[comp])
+}
+v <- c(1,2,3,4,5,6,7,8)
+sodi(v)
 
 # ========================================================================
 # 3. Sestavite funkcijo `ime_datoteke(ime, koncnica)`, ki vrne niz, ki 
@@ -220,7 +236,10 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # `ime_datoteke("tabela")` pa naj vrne `"tabela.csv"`.
 # ========================================================================
 
-
+ime_datoteke <- function (ime, koncnica="csv") {
+  paste(ime, ".", koncnica, sep = "")
+}
+ime_datoteke("vaje2", "R")
 
 # ========================================================================
 # 4. Sestavite funkcijo `prastevila.med(m, n)`, ki vrne vektor vseh praštevil
@@ -228,14 +247,46 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # preverjali, če je dano število praštevilo (ampak samo za x>2!).
 # ========================================================================
 
+prastevila_med <- function(m, n) {
+  v <- seq(m, n)
+  p <- c()
+  
+  for (i in v) {
+    y <- !(0 %in% (i %% seq(2, i-1)))
+    p <- c(p,y)
+  }
+  
+  if (m == 2) {
+    return(sum(p) + 1)
+  }
+  
+  return(sum(p))
+}
 
+prastevila_med(2,120)
 
 # ========================================================================
 # 5. Sestavite funkcijo `vsota.prastevil.med(m, n)`, ki vrne vsoto vseh
 # praštevil med `m` in `n`.
 # ========================================================================
 
-
+vsota_prastevil_med <- function(m, n) {
+  v <- seq(m, n)
+  p <- c()
+  
+  for (i in v) {
+    if (i > 2 && !(0 %in% (i %% seq(2,i-1)))) {
+      p <- c(p, i)
+    }
+  }
+  
+  if (m == 2) {
+    p <- c(p, 2)
+  }
+  
+  sum(p)
+}
+vsota_prastevil_med(2, 10)
 
 # ========================================================================
 # 6. Poznamo tri stopnje DDV: 
@@ -249,8 +300,13 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # "neznan vhod". 
 # ========================================================================
 
+DDV <- function(s) {
+  li = list (A = "5%", B = "9.5%", C = "22%")
+  li[[s]][is.null(li[[s]])] <- "neznan vhod"
+  li[[s]]
+}
 
-
+DDV("A")
 
 # ========================================================================
 # 7. Napišite funkcijo DDV na način, da bo sprejela vektor kategorij in
@@ -262,8 +318,18 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # vektor "5%", "5%", "22%", "9.5%", "22%", "neznan vhod"
 # =======================================================================
 
+DDV.v <- function(vec) {
+  v <- c()
+  li = list (A = "5%", B = "9.5%", C = "22%")
+  
+  v <- unname((li[vec]))
+  v[sapply(v, is.null)]<- "neznan vhod"
+  v <- unlist(v)
+  v
+}
 
 
+DDV.v(c("A", "A", "C", "B", "21ZUBDW", "D"))
 
 # ========================================================================
 # 8. Implementiraj funkcijo kvalitativni_odvodi, ki za podan vektor x 
@@ -277,7 +343,16 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # je c(-1, 0, 1).
 # ========================================================================
 
+kvalitativni_odvodi <- function(v) {
+  s <- list()
+  vk <- v[2:length(v)]
+  v <- v[-length(v)]
+  r <- vk - v
+  r[r<0] <- -1; r[r>0] <- 1
+  r
+}
 
+kvalitativni_odvodi(c(3, 1, 1, 2, 23, 3, 42, 4, 32, 23))
 
 # ========================================================================
 # 9. Implementiraj funkcijo ekstremi, ki za podan vektor x vrne vektor 
@@ -293,8 +368,19 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # je c(-5, 5), vektor njihovih indeksov pa c(3, 8).
 # ========================================================================
 
-
-
+ekstremi <- function(vec, index=FALSE) {
+  der <- kvalitativni_odvodi(vec)[-length(kvalitativni_odvodi(vec))]
+  der_sh <- kvalitativni_odvodi(vec)[-1]
+  r <- der + der_sh
+  loc <- which(r == 0) + 1
+  
+  if (index) {
+    print(loc) 
+  }
+  
+  vec[loc]
+}
+ekstremi(c(-1, -3, -5, -3, -1, 1, 3, 5, 3, 1), index=TRUE)
 
 # ========================================================================
 # 10. Implementiraj funkcijo drsece_povprecje_3, ki za podan vektor x 
@@ -311,8 +397,14 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # drsece_povprecje_3(c(1:5, 6:1)) = c(2, 3, 4, 5, 5.333, 5, 4, 3, 2)
 # ========================================================================
 
-
-
+drsece_povprecje_3 <- function(v) {
+  n <- length(v)
+  m <- matrix(1:3, 3, (n-2))
+  m <- m + rep(0:(n-3), each = 3)
+  result <- colSums(m)/3
+  result
+}
+drsece_povprecje_3(c(1, 2, 3, 4, 5, 6))
 
 # ========================================================================
 # 11. Implementiraj bolj splošno funkcijo drsece_povprecje(x, k), ki za 
@@ -320,5 +412,13 @@ s <- list(x=1:5, y=2:6, z=3:7)
 # Funkcijo napiši brez uporabe zanke for!
 # ========================================================================
 
+drsece_povprecje <- function(v, k=1) {
+  n <- length(v)
+  m <- matrix(1:k, k, (n-(k-1)))
+  m <- m + rep(0:(n-k), each = k)
+  result <- colSums(m)/k
+  result
+}
+drsece_povprecje(c(1, 2, 3, 4, 5, 6), 5)
 
 
