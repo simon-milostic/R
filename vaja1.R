@@ -303,11 +303,10 @@ sum(weekdays(pravi_datumi)) %in% c("Saturday","Sunday")
 # Sestavi vektor datumov vseh petkov, ki padejo na trinajsti dan v mesecu, 
 # v obdobju od tvojega rojstnega do današnjega dne.
 # ========================================================================
+
 datum0 <- paste0("22.11.2006")
 pravi_datum <- as.Date(datum0, format = "%d.%m.%y")
 pravi_datum
-
-
 
 # ========================================================================
 # 9. Sestavi vektorje z naslednjimi elementi:
@@ -352,6 +351,7 @@ y <- 0 %in% (x %% 2:(x-1))
 
 x = sample(1:999, 250, replace = TRUE)
 y = sample(1:999, 250, replace = TRUE)
+
 #=====================================
 #vector = 1:249
 #y_n <- rep(0,250)
@@ -359,6 +359,7 @@ y = sample(1:999, 250, replace = TRUE)
 #x <- x[-length(x)]
 #p <- y_n - x
 #=====================================
+
 y[-1] - x[-length(x)]
 
 # ========================================================================
@@ -381,6 +382,7 @@ y[-1] - x[-length(x)]
 
 # ========================================================================
 
+# 12. a)
 v <- LETTERS
 q <- c(1,2,3,4)
 v <- v[q]
@@ -388,17 +390,20 @@ p <- rep(v, each = 3)
 z <- rep(v, 3)
 p; z
 
+# 12. b)
 g <- letters
 l <- sort(sample(g, size = 10))
 l
 
-
+# 12. c), d)
 v <- LETTERS
 g <- letters
 a <- sample(v, size = 5)
 b <- sample(g, size = 5)
-sort_let <- sort(a+b)
+sort_let <- sort(c(a,b))
+sort_dec <- sort(c(a,b), decreasing = TRUE)
 sort_let
+sort_dec
 
 # ========================================================================
 # 13. V programu za urejanje preglednic Excel (in podobno v programih 
@@ -415,5 +420,15 @@ sort_let
 # vektorja z imeni stolpcev. 
 # Nato s klicem funkcije which ugotovite indeks stolpca XFD v tem vektorju.
 # ========================================================================
+
+vec_1 <- LETTERS
+grid_2 <- expand.grid(LETTERS, LETTERS)
+grid_3 <- expand.grid(LETTERS, LETTERS, LETTERS)
+
+vec_2 <- paste0(grid_2$Var2, grid_2$Var1)
+vec_3 <- paste0(grid_3$Var3, grid_3$Var2, grid_3$Var1)
+
+t <- c(vec_1, vec_2, vec_3)
+which(t == "XFD")
 
 
