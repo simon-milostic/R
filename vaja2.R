@@ -416,9 +416,11 @@ drsece_povprecje <- function(v, k=1) {
   n <- length(v)
   m <- matrix(1:k, k, (n-(k-1)))
   m <- m + rep(0:(n-k), each = k)
-  result <- colSums(m)/k
-  result
+  result <- v[m]
+  result <- matrix(result, k, n-k+1)
+  q <- colMeans(result)
+  q
 }
-drsece_povprecje(c(1, 2, 3, 4, 5, 6), 5)
+drsece_povprecje(c(12, 32, 43, 4, 234, 213, 338, 201), 5)
 
 
