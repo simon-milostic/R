@@ -20,7 +20,8 @@ Sola <- data.frame(matematika,
 Sola <- data.frame(ime = names(matematika),
                    matematika, 
                    sportna_vzgoja = Telovadba)
-rownames(Sola) <- NULL
+rownames(Sola) = NULL
+
 
 # Uporabimo lahko tudi funkcijo `tibble` iz knjižnice `tibble`
 library(tibble)
@@ -28,6 +29,7 @@ Sola.t <- tibble(ime = names(matematika),
                  matematika, 
                  sportna_vzgoja = Telovadba)
 Sola.t <- as_tibble(Sola)
+Sola.t
 
 
 # Kaj delajo funkcije `rownames`, `colnames`, `names`, `nrow`, `ncol` in `dim`?
@@ -156,12 +158,11 @@ Otoki
 # Namig: rabiš sestaviti eno tabelo z dvema dimenzijskima in eno merjeno 
 # spremenljivko.
 # ========================================================================
+
 library(readxl)
 izidi <- read_excel("izidi.xlsx")
 colnames(izidi) <- c("ime_priimek", "A", "B")
-
-
-
+izidi
 
 # ========================================================================
 # 9.
@@ -180,7 +181,8 @@ kava <- tibble("vrsta_kavnega_napitka" = c("Črna kava", "Kava z mlekom", "Kava 
 # Premisli kako bi iz zgornje tabele sestavili podatkovne tabele urejenih 
 # podatkov. Sestavi ustrezne podatkovne tabele v R-ju
 # ========================================================================
-
-
+list(kava)[[1]][[1]]
+kava <- transpose(kava)
+kava[[1]]
 
 
